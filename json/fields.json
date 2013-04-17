@@ -1,0 +1,12 @@
+[
+	"title",
+	"nytd_title",
+	"url",
+	"date",
+	"page_facet",
+	"des_facet",
+	"geo_facet",
+	"nytd_des_facet",
+	"nytd_geo_facet",
+	"desk_facet"
+]
