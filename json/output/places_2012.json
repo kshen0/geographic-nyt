@@ -1,0 +1,287 @@
+{
+    "Buenos Aires (Argentina)": {
+        "lat": -34.6037232, 
+        "articles": [
+            {
+                "date": "20121207", 
+                "url": "http://www.nytimes.com/2012/12/07/world/americas/argentina-fire-forms-toxic-cloud.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina"
+                ], 
+                "page_facet": "8", 
+                "title": "World Briefing | The Americas; Argentina: Fire Forms Toxic Cloud"
+            }, 
+            {
+                "date": "20121121", 
+                "url": "http://www.nytimes.com/2012/11/21/world/americas/argentina-general-strike-is-challenge-to-president.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina"
+                ], 
+                "page_facet": "6", 
+                "title": "World Briefing | The Americas; Argentina: General Strike Is Challenge To President"
+            }, 
+            {
+                "date": "20121118", 
+                "url": "http://travel.nytimes.com/2012/11/18/travel/the-pop-up-surfaces-in-buenos-aires.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)"
+                ], 
+                "page_facet": "2", 
+                "title": "Heads Up; Argentine Chefs And Pop-Ups"
+            }, 
+            {
+                "date": "20121108", 
+                "url": "http://www.nytimes.com/2012/11/08/world/americas/argentina-chevrons-assets-are-frozen.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina", 
+                    "Amazon Jungle", 
+                    "Ecuador"
+                ], 
+                "page_facet": "9", 
+                "title": "World Briefing | The Americas; Argentina: Chevron&#X2019;S Assets Are Frozen"
+            }, 
+            {
+                "date": "20120923", 
+                "url": "http://travel.nytimes.com/2012/09/23/travel/hotel-review-hotel-boca-in-buenos-aires.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina"
+                ], 
+                "page_facet": "2", 
+                "title": "Check In, Check Out; Buenos Aires: Hotel Boca"
+            }, 
+            {
+                "date": "20120916", 
+                "url": "http://travel.nytimes.com/2012/09/16/travel/restaurant-report-tarquino-in-buenos-aires.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)"
+                ], 
+                "page_facet": "4", 
+                "title": "Bites; Buenos Aires: Tarquino"
+            }, 
+            {
+                "date": "20120813", 
+                "url": "http://www.nytimes.com/2012/08/13/world/americas/argentina-offers-its-aging-writers-a-little-security.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)"
+                ], 
+                "page_facet": "5", 
+                "title": "Buenos Aires Journal; Argentina'S New Literary Tradition: Pensions For Aging Writers"
+            }, 
+            {
+                "date": "20120607", 
+                "url": "http://www.nytimes.com/2012/06/07/greathomesanddestinations/real-estate-in-argentina.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)"
+                ], 
+                "title": "International Real Estate; House Hunting In ... Argentina"
+            }, 
+            {
+                "date": "20120523", 
+                "url": "http://www.nytimes.com/2012/05/23/world/americas/argentina-bomb-was-set-to-strike-former-president-of-colombia.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina", 
+                    "Colombia"
+                ], 
+                "page_facet": "8", 
+                "title": "World Briefing | The Americas; Argentina: Bomb Was Set To Strike Former President Of Colombia"
+            }, 
+            {
+                "date": "20120311", 
+                "url": "http://travel.nytimes.com/2012/03/11/travel/eva-perons-buenos-aires.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina"
+                ], 
+                "page_facet": "6", 
+                "title": "Evita'S Buenos Aires"
+            }, 
+            {
+                "date": "20120223", 
+                "url": "http://www.nytimes.com/2012/02/23/world/americas/commuter-train-crash-kills-dozens-in-argentina.html", 
+                "nytd_geo_facet": [
+                    "Buenos Aires (Argentina)", 
+                    "Argentina"
+                ], 
+                "page_facet": "8", 
+                "title": "Train Crashes In Buenos Aires, Killing Dozens As It Fails To Stop"
+            }
+        ], 
+        "lon": -58.3815931, 
+        "geocoder_name": "Buenos Aires, Argentina"
+    }, 
+    "Old Lyme (Conn)": {
+        "lat": 41.3172222, 
+        "articles": [
+            {
+                "date": "20120902", 
+                "url": "http://events.nytimes.com/2012/09/02/nyregion/a-review-of-the-old-lyme-inn-in-old-lyme.html", 
+                "nytd_geo_facet": [
+                    "Old Lyme (Conn)"
+                ], 
+                "page_facet": "9", 
+                "title": "Connecticut Dining | Old Lyme; Original Charm Survives A Year Of Renovation"
+            }, 
+            {
+                "date": "20120715", 
+                "url": "http://www.nytimes.com/2012/07/15/nyregion/on-hudson-at-the-florence-griswold-museum-in-old-lyme.html", 
+                "nytd_geo_facet": [
+                    "Old Lyme (Conn)", 
+                    "Hudson River Valley (NY)"
+                ], 
+                "page_facet": "11", 
+                "title": "Arts | Connecticut; The Hudson River School, Seen Anew"
+            }
+        ], 
+        "lon": -72.3030556, 
+        "geocoder_name": "Old Lyme, CT, USA"
+    }, 
+    "Catskills (NYS Area)": {
+        "lat": 40.6933525, 
+        "articles": [
+            {
+                "date": "20121004", 
+                "url": "http://www.nytimes.com/2012/10/04/nyregion/irving-cohen-catskills-maitre-dhotel-matchmaker-dies-at-95.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "33", 
+                "title": "Irving Cohen, 95, Major-Domo In Catskills"
+            }, 
+            {
+                "date": "20120930", 
+                "url": "http://www.nytimes.com/2012/09/30/realestate/fracking-fears-hurt-second-home-sales-in-catskills.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "1", 
+                "title": "Gas Drilling Jitters Unsettle Catskills Sales"
+            }, 
+            {
+                "date": "20120920", 
+                "url": "http://www.nytimes.com/2012/09/20/garden/jared-handelsman-and-portia-munson-make-their-own-museum-at-home.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "1", 
+                "title": "House Proud; Their Own Museum"
+            }, 
+            {
+                "date": "20120827", 
+                "url": "http://www.nytimes.com/2012/08/27/nyregion/a-year-after-tropical-storm-irene-hope-and-uncertainty-in-prattsville-ny.html", 
+                "nytd_geo_facet": [
+                    "Prattsville (NY)", 
+                    "Catskills (NYS Area)", 
+                    "New York State"
+                ], 
+                "page_facet": "14", 
+                "title": "In Small Town Hit By A Storm, Hope, Despair And A Mudfest"
+            }, 
+            {
+                "date": "20120825", 
+                "url": "http://www.nytimes.com/2012/08/25/arts/dance/ukrainian-dance-at-the-soyuzivka-resort-in-the-catskills.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "1", 
+                "title": "To Trip The Volynska Polka, Respectfully In The Catskills"
+            }, 
+            {
+                "date": "20120805", 
+                "url": "http://www.nytimes.com/2012/08/05/nyregion/answers-to-questions-about-new-york.html", 
+                "nytd_geo_facet": [
+                    "New York City", 
+                    "Catskills (NYS Area)", 
+                    "Brooklyn (NYC)"
+                ], 
+                "page_facet": "3", 
+                "title": "F.Y.I.; Answers To Questions About New York"
+            }, 
+            {
+                "date": "20120731", 
+                "url": "http://www.nytimes.com/2012/07/31/nyregion/catskill-slogan-contest-gets-many-entries.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "17", 
+                "title": "It May Be An Area Words Cannot Describe"
+            }, 
+            {
+                "date": "20120716", 
+                "url": "http://www.nytimes.com/2012/07/16/opinion/a-new-look-for-the-catskills-dont-forget-the-old.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)", 
+                    "Catskill Mountains"
+                ], 
+                "page_facet": "16", 
+                "title": "Letter; A New Look For The Catskills: Don'T Forget The Old"
+            }, 
+            {
+                "date": "20120710", 
+                "url": "http://travel.nytimes.com/2012/07/10/nyregion/beyond-borscht-rebranding-the-catskills.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "15", 
+                "title": "Seeking To Lure The Crowds Again. But Hold The Borscht."
+            }, 
+            {
+                "date": "20120705", 
+                "url": "http://www.nytimes.com/2012/07/05/greathomesanddestinations/in-catskill-ny-finding-an-affordable-country-home.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "5", 
+                "title": "On Location; Cleaning Up Nicely"
+            }, 
+            {
+                "date": "20120527", 
+                "url": "http://travel.nytimes.com/2012/05/27/realestate/the-summer-rental-rat-race.html", 
+                "nytd_geo_facet": [
+                    "Hamptons (NY)", 
+                    "Catskills (NYS Area)", 
+                    "Provincetown (Mass)", 
+                    "East Hampton (NY)"
+                ], 
+                "page_facet": "1", 
+                "title": "The Summer Rental Rat Race"
+            }, 
+            {
+                "date": "20120416", 
+                "url": "http://www.nytimes.com/2012/04/16/nyregion/fire-in-catskills-destroys-site-of-former-browns-hotel.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "15", 
+                "title": "Fire In Catskills Ravages Site Of Old Brown'S Hotel"
+            }, 
+            {
+                "date": "20120330", 
+                "url": "http://www.nytimes.com/2012/03/30/nyregion/in-ulster-county-fury-at-new-york-city-over-muddy-creek.html", 
+                "nytd_geo_facet": [
+                    "New York City", 
+                    "Lower Esopus Creek (NY)", 
+                    "Catskills (NYS Area)", 
+                    "Ulster County (NY)"
+                ], 
+                "page_facet": "24", 
+                "title": "Muddying Of Beloved Creek Is Last Straw For Neighbors Of A City Reservoir"
+            }, 
+            {
+                "date": "20120308", 
+                "url": "http://www.nytimes.com/2012/03/08/nyregion/planned-catskill-resort-at-concord-hotel-site-faces-hurdles.html", 
+                "nytd_geo_facet": [
+                    "Catskills (NYS Area)"
+                ], 
+                "page_facet": "25", 
+                "title": "Planned $600 Million Catskill Resort Faces Suit And Doubts"
+            }
+        ], 
+        "lon": -73.38996000000002, 
+        "geocoder_name": "Catskill Avenue, Babylon, NY, USA"
+    }
+}

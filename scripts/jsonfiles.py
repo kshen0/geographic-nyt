@@ -8,5 +8,4 @@ def read(filename):
 
 def write(filename, output):
 	with open(filename, "w") as outfile:
-		json.dump(output, outfile)
-		print "wrote to " + filename
+		json.dump(output, outfile, indent=4)

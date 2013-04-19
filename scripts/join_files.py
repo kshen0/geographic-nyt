@@ -1,27 +1,28 @@
 import json 
+import jsonfiles
+import sys
 
-def main():
-	year = 2012
-	segments = 9
+# usage: python join_files.py year segments
+
+def main(argv):
+	if len(argv) != 2 or int(argv[0]) < 1980:
+		print "Invalid args: " + argv
+		return
+
+	year = int(argv[0])
+	segments = int(argv[1])
+	print "Joining %d files for %d" % (segments, year)
 	output = []
 	for i in xrange(1, segments + 1):
-		filename = "../json/nyt_articles_%s%d.json" % (str(year), i)
-		print filename
-		r = read_json_from_file(filename)
+		filename = ("../json/output/nyt_articles_%s_%d.json" % 
+					(str(year), i))
+		r = jsonfiles.read(filename)
+		print type(r)
 		output = output + r
 		print len(output)
 
-	outfile_name = "../json/nyt_articles_" + str(year) + ".json"
-	with open(outfile_name, "w") as outfile:
-		json.dump(output, outfile)
-		print "wrote " + str(len(output)) + " entries to " + outfile_name
-
-
-def read_json_from_file(filename):
-	f = open(filename, 'r')
-	json_obj = json.load(f)
-	f.close()
-	return json_obj
+	outfile_name = "../json/output/nyt_articles_%d_all.json" % year
+	jsonfiles.write(outfile_name, output)
 
 if __name__ == "__main__":
-	main()
+	main(sys.argv[1:])

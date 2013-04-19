@@ -1,56 +1,66 @@
 import requests
 import pprint
 import json
+import jsonfiles
 import time
 
-API_KEY = "4bad459fd95c368621cda11f241190e2:11:67566190" 
+API_KEY = "01d32981db766d4ced24f3d339054fb9:11:67517747" 
 
 def main():
-	fields = read_json_from_file("../json/fields.json")
+	fields = jsonfiles.read("../json/fields.json")
 	year = 2012
 	results = []
 
 	# make request once to get the number of pages in the response
-	"""
 	querystring = get_querystring(year, fields, 0)
 	r = requests.get(querystring).json()
 	results = results + r["results"]
 	pages = r["total"] / 10
-	"""
 
 	# make request for remaining pages
 	# write out every 1000 requests
-	for p in xrange(1, pages + 1):
-		print p
-		querystring = get_querystring(year, fields, 0)
-		r = requests.get(querystring).json()
-		results = results + r["results"]
+	i = 1
+	last_start = 1 
+	for p in xrange(last_start, pages + 1):
+		# try until request succeeds
+		while True:
+			try:
+				querystring = get_querystring(year, fields, p)
+				r = requests.get(querystring).json()
+				results = results + r["results"]
+				print ("request #%d - first title: %s") % (p, r["results"][0]["title"])
+			except ValueError as e:
+				print e
+				print "retrying ..."
+				time.sleep(1.0)
+				continue
+			break
 
 		if p % 1000 == 0:
+			print "set of 1000 - first title is:\n%s" % results[0]["title"]
 			filename = "".join([
-				"../json/nyt_articles_", 
+				"../json/output/nyt_articles_", 
 				str(year), 
 				"_",
-				str(p / 1000),
+				str(i),
 				".json"])
-			with open(filename, "w") as outfile:
-				json.dump(results, outfile)
-				print "wrote to " + filename
+			jsonfiles.write(filename, results)
+			i += 1
 
 			# reset results
 			results = []
 
 		# sleep so we're not locked out of the API
-		time.sleep(0.1)
+		time.sleep(0.08)
 
-
-
-
-def read_json_from_file(filename):
-	f = open(filename, 'r')
-	json_obj = json.load(f)
-	f.close()
-	return json_obj
+	# write remaining results
+	filename = "".join([
+		"../json/output/nyt_articles_", 
+		str(year), 
+		"_",
+		str(i),
+		".json"])
+	jsonfiles.write(filename, results)
 
 def get_querystring(year, fields, offset):
 	query_components = [

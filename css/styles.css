@@ -3,5 +3,6 @@ svg {
 }
 
 .place {
-	fill: #F7FAB1;
+	/*fill: #F7FAB1;*/
+	fill: #000;
 }
