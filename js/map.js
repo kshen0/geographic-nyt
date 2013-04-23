@@ -7,6 +7,7 @@ var svg = d3.select("body").append("svg")
 
 // Render the map
 d3.json("../json/map_data/world2.json", function(error, world) {
+//d3.json("../json/output/world_articles.json", function(error, world) {
 	// Convert TopoJSON to GeoJSON
 	var subunits = topojson.object(world, world.objects.subunits);
 
@@ -27,17 +28,37 @@ d3.json("../json/map_data/world2.json", function(error, world) {
 		.attr("d", path);
 		*/
 
-	// Set dot size
-	path.pointRadius(1);
+	svg.selectAll(".subunit")
+	    .data(topojson.object(world, world.objects.subunits).geometries)
+	  .enter().append("path")
+	    .attr("class", function(d) { 
+	    	console.log(d);
+	    	return "subunit " + d.id; })
+	    .attr("d", path);
 
-	// Draw dots for cities
+	// Set dot size
+	path.pointRadius(10);
+
+	// Draw dots for countries
 	svg.append("path")
-		.datum(topojson.object(world, world.objects.places))
+		.datum(topojson.object(world, world.objects.countries_2012))
 		.attr("d", path)
 		.attr("class", "place");
 
 	d3.selectAll(".place").each(function(d, i) {
-		d3.select(this).style("fill-opacity", Math.random());
+		d3.select(this).style("fill-opacity", 0.2);
 	});
+
+	// Set dot size
+	path.pointRadius(1);
+	// Draw dots for other places
+	svg.append("path")
+		.datum(topojson.object(world, world.objects.places_2012))
+		.attr("d", path)
+		.attr("class", "place");
+	d3.selectAll(".place").each(function(d, i) {
+		d3.select(this).style("fill-opacity", 0.7);
+	});
+
 
 });

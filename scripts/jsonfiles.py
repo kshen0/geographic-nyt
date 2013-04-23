@@ -9,3 +9,7 @@ def read(filename):
 def write(filename, output):
 	with open(filename, "w") as outfile:
 		json.dump(output, outfile, indent=4)
+
+def write_min(filename, output):
+	with open(filename, "w") as outfile:
+		json.dump(output, outfile)
