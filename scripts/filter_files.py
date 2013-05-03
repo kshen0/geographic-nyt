@@ -7,30 +7,33 @@ from geopy.geocoders.base import Geocoder, GeocoderResultError
 import time
 
 FACET = "nytd_geo_facet"
+USE_CACHED = True
 
 def main(year):
-	# load list of all articles
-	filename = "../json/output/nyt_articles_%s_all.json" % str(year)
-	all_articles = jsonfiles.read(filename)
+	if not USE_CACHED:
+		# load list of all articles
+		filename = "../json/output/nyt_articles_%s_all.json" % str(year)
+		all_articles = jsonfiles.read(filename)
 
-	# filter out articles with no nytd_geo_facet property
-	filtered_articles = get_geotagged(all_articles) 
-	
-	# write out all articles with a geo_facet
-	filename = "../json/output/nyt_articles_" + str(year) + "_filtered.json"
-	jsonfiles.write(filename, filtered_articles)
+		# filter out articles with no nytd_geo_facet property
+		filtered_articles = get_geotagged(all_articles) 
+		
+		# write out all articles with a geo_facet
+		filename = "../json/output/nyt_articles_" + str(year) + "_filtered.json"
+		jsonfiles.write(filename, filtered_articles)
 
-	# get categorized dict of articles
-	# {
-	#    "China": [{..}, {..} ... {..}], ...
-	# 	 ...
-	# }
-	#locations = categorize(filtered_articles)
+		# get categorized dict of articles
+		# {
+		#    "China": [{..}, {..} ... {..}], ...
+		# 	 ...
+		# }
+		locations = categorize(filtered_articles)
 
-	# write out articles that have been geocoded
-	#jsonfiles.write("../json/output/geocoded_locs_" + str(year) + ".json", locations)
-
-	locations = jsonfiles.read("../json/output/geocoded_locs_" + str(year) + ".json")
+		# write out articles that have been geocoded
+		jsonfiles.write("../json/output/geocoded_locs_" + str(year) + ".json", locations)
+	else:
+		filtered_articles = jsonfiles.read("../json/output/nyt_articles_" + str(year) + "_filtered.json")
+		locations = jsonfiles.read("../json/output/geocoded_locs_" + str(year) + ".json")
 
 	# get the number of articles in each category in descending order
 	# this is not necessary for writing output
@@ -73,10 +76,10 @@ def write_output(filtered_articles, countries_geojson, places_geojson, year):
 	# write to file
 	try:
 		# write out countries and the articles that correspond to them
-		filename = "../json/output/countries_%s_fux.json" % year
+		filename = "../json/output/countries_%s_v2.json" % year
 		jsonfiles.write(filename, countries_geojson)
 		# write out places and the articles that correspond to them
-		filename = "../json/output/places_%s_fux.json" % year
+		filename = "../json/output/places_%s_v2.json" % year
 		jsonfiles.write(filename, places_geojson)
 	except IOError as e:
 		print e
@@ -89,8 +92,9 @@ def get_feature(article, loc):
 			"geometry": 
 				{ 
 					"type": "Point", 
-					#"coordinates": [loc["lon"], loc["lat"]]
-					"coordinates": [loc["lat"], loc["lon"]]
+					# Switch lat and lon - geocoder data transposed?
+					"coordinates": [loc["lon"], loc["lat"]]
+					#"coordinates": [loc["lat"], loc["lon"]]
 				} 
 		})
 	except KeyError as e:
