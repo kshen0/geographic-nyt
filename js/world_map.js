@@ -10,19 +10,22 @@ var TRANSITION_TIME = 400; // ms
 var moveable = false;
 
 // JSON
-var articlesByCountry = null;
 var world = null;
 var countries = null;
 var places = null;
+var articlesByCountry = null;
 
 
+/*
 queue()
-	.defer(d3.json, "/json/world/subunits_litest_topo.json")
-	.defer(d3.json, "/json/output/countries_2012_lite.json")
-	.defer(d3.json, "/json/output/places_2012_lite.json")
-	.defer(d3.json, "/json/output/articles_by_country.json")
+	.defer(d3.json, "/subunits_litest_topo.json")
+	.defer(d3.json, "/countries_2012_lite.json")
+	.defer(d3.json, "/places_2012_lite.json")
+	.defer(d3.json, "/articles_by_country.json")
 	.await(cacheJSON);
+*/
 
+/*
 function cacheJSON(error, w, c, p, a) {
 	if (error) {
 		console.warn(error);
@@ -34,6 +37,25 @@ function cacheJSON(error, w, c, p, a) {
 
 	renderMap();
 };
+*/
+cacheJSON();
+
+function cacheJSON() {
+	$.getJSON('./js/subunits_litest_topo.json', function(json) {
+		world = json;
+		$.getJSON('./js/countries_2012_lite.json', function(json) {
+			countries = json;
+			$.getJSON('./js/places_2012_lite.json', function(json) {
+				places = json;
+				$.getJSON('./js/articles_by_country.json', function(json) {
+					articlesByCountry = json;
+						renderMap();
+				});
+			});
+		});
+	});
+}
+
 
 function renderMap() {
 	if (!svg) {
