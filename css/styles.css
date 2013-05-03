@@ -1,21 +1,27 @@
 svg {
 	border: solid 1px;
+	background-color: #636363;
+	fill: none;
 }
 
 .place {
-	/*fill: #F7FAB1;*/
-	fill: #000;
+	fill: #F7FAB1;
+	/*fill: #000;*/
 }
 
-.subunit { fill: #fff; }
+/*
+svg {
+	-webkit-transform: rotate(270deg);
+}
+*/
+
+.subunit { fill: #000; }
 
 .subunit-boundary {
   fill: none;
+  /*
   stroke: #777;
+  */
   stroke-dasharray: 2,2;
   stroke-linejoin: round;
-}
-
-.subunit-boundary.IRL {
-  stroke: #aaa;
 }

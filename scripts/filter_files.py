@@ -25,10 +25,12 @@ def main(year):
 	#    "China": [{..}, {..} ... {..}], ...
 	# 	 ...
 	# }
-	locations = categorize(filtered_articles)
+	#locations = categorize(filtered_articles)
 
 	# write out articles that have been geocoded
-	jsonfiles.write("../json/output/geocoded_locs_" + str(year) + "_.json")
+	#jsonfiles.write("../json/output/geocoded_locs_" + str(year) + ".json", locations)
+
+	locations = jsonfiles.read("../json/output/geocoded_locs_" + str(year) + ".json")
 
 	# get the number of articles in each category in descending order
 	# this is not necessary for writing output
@@ -63,7 +65,7 @@ def main(year):
 				places_geojson["features"].append(feature)
 
 	print ("%d article matches for countries and %d matches for places" %
-			(len(countries_geojson), len(places_geojson)))
+			(len(countries_geojson["features"]), len(places_geojson["features"])))
 
 	write_output(filtered_articles, countries_geojson, places_geojson, year)
 
@@ -71,10 +73,10 @@ def write_output(filtered_articles, countries_geojson, places_geojson, year):
 	# write to file
 	try:
 		# write out countries and the articles that correspond to them
-		filename = "../json/output/countries_%s.json" % year
+		filename = "../json/output/countries_%s_fux.json" % year
 		jsonfiles.write(filename, countries_geojson)
 		# write out places and the articles that correspond to them
-		filename = "../json/output/places_%s.json" % year
+		filename = "../json/output/places_%s_fux.json" % year
 		jsonfiles.write(filename, places_geojson)
 	except IOError as e:
 		print e
@@ -87,7 +89,8 @@ def get_feature(article, loc):
 			"geometry": 
 				{ 
 					"type": "Point", 
-					"coordinates": [loc["lon"], loc["lat"]]
+					#"coordinates": [loc["lon"], loc["lat"]]
+					"coordinates": [loc["lat"], loc["lon"]]
 				} 
 		})
 	except KeyError as e:
@@ -109,6 +112,9 @@ def categorize(articles):
 				except GeocoderResultError as err:
 					print str(err) + " for facet " + geo_facet
 					continue
+				except ValueError as err:
+					print str(err) + " for facet " + geo_facet
+					continue
 
 				# create articles list for this location
 				locations[geo_facet] = {"articles": []} 
@@ -123,7 +129,7 @@ def categorize(articles):
 				locations[geo_facet]["name"] = name
 
 				# wait to avoid being locked out of api
-				time.sleep(0.3)
+				time.sleep(0.5)
 				i += 1
 
 			locations[geo_facet]["articles"].append(article)
