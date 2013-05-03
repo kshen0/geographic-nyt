@@ -3,12 +3,14 @@ import pprint
 import json
 import jsonfiles
 import time
+import sys
 
 API_KEY = "01d32981db766d4ced24f3d339054fb9:11:67517747" 
 
-def main():
+def main(year_str):
 	fields = jsonfiles.read("../json/fields.json")
-	year = 2012
+	year = int(year_str) 
+	print 'Getting articles for the year ' + str(year)
 	results = []
 
 	# make request once to get the number of pages in the response
@@ -34,6 +36,9 @@ def main():
 				print "retrying ..."
 				time.sleep(1.0)
 				continue
+			except KeyError as e:
+				print e
+				print 'Skipping ', str(p)
 			break
 
 		if p % 1000 == 0:
@@ -75,4 +80,7 @@ def get_querystring(year, fields, offset):
 	return "".join(query_components)
 
 if __name__ == "__main__":
-	main()
+	if len(sys.argv) != 2:
+		print "Invalid args " + str(sys.argv[1:])
+		sys.exit(1)
+	main(sys.argv[1])

@@ -1,3 +1,8 @@
+body {
+  font: small Georgia, serif;
+  font-family: 'Georgia', serif;
+}
+
 .country-dot {
   fill: steelblue;
   opacity: 0.9;
@@ -5,22 +10,34 @@
 
 .place-dot {
   fill: #F7FAB1;
-  opacity: 0.9;
+  /*opacity: 0.9;*/
 }
 
 svg {
-  background-color: #000;
   /*
+  background-color: #000;
+  */
   background-color: #DAE7E7;
+  font: Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica', 'Arial', 'sans-serif';
+  font-size: 10pt; 
+  /*
 	fill: #DAE7E7;
   */
 }
 
-.subunit { fill: #000; }
+.subunit { 
+  /*
+  fill: #000; 
+  */
+  fill: #273C5A;
+}
 
 .subunit-boundary {
   fill: none;
-  stroke: #fff;
-  stroke-dasharray: 2,2;
+  /*
+  stroke: #DAE7E7;
+  */
+  stroke: none;
   stroke-linejoin: round;
 }
