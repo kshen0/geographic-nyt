@@ -1,57 +1,28 @@
-/*
 var width = 754,
     height = 700;
+
+/*
+var width = 960,
+    height = 500;
+*/
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 var proj = "mercator";
-*/
-
-var width = 960,
-    height = 500;
 
 var radius = d3.scale.sqrt()
     .domain([0, 1e6])
     .range([0, 10]);
 
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-/*
-queue()
-    .defer(d3.json, "/json/sampledata/us.json")
-    .defer(d3.json, "/json/sampledata/us-state-centroids.json")
-    .await(ready);
-*/
 queue()
 	.defer(d3.json, "/json/world/world.json")
 	.defer(d3.json, "/json/output/countries_2012_v2.json")
-    .defer(d3.json, "/json/sampledata/us-state-centroids.json")
+	.defer(d3.json, "/json/output/places_2012_v2.json")
 	.await(loadingDone);
 
-
-function ready(error, us, centroid) {
-  if (error) {
-  	console.log(error);
-  }
-  svg.append("path")
-      .attr("class", "states")
-      .datum(topojson.object(us, us.objects.states))
-      .attr("d", path);
-
-	svg.selectAll(".symbol")
-		.data(centroid.features.sort(function(a, b) { return b.properties.population - a.properties.population; }))
-	.enter().append("path")
-		.attr("class", "symbol")
-		.attr("d", path.pointRadius(function(d) { return radius(d.properties.population); }));
-}
-
-
-function loadingDone(error, world, countries, centroid) {
+function loadingDone(error, world, countries, places) {
 	var projection = d3.geo.mercator()
 			.scale(120)
 			.translate([width/2, height/2]);
@@ -59,21 +30,25 @@ function loadingDone(error, world, countries, centroid) {
 	var path = d3.geo.path()
 				.projection(projection);
 
+	// Draw countries of the world
 	svg.append("path")
-		.attr("class", "subunits")
+		.attr("class", "subunit")
 		.datum(topojson.object(world, world.objects.subunits))
 		.attr("d", path);
-	svg.selectAll(".symbol")
+
+	// Draw dots for countries
+	svg.selectAll(".country-dot")
 		.data(countries.features)
 	.enter().append("path")
-		.attr("class", "symbol")
-		.attr("d", path.pointRadius(function(d) { return Math.random() * 5}));
-	return;
-	svg.selectAll(".symbol")
-		.data(centroid.features.sort(function(a, b) { return b.properties.population - a.properties.population; }))
+		.attr("class", "country-dot")
+		.attr("d", path.pointRadius(4));
+
+	// Draw dots for other places
+	svg.selectAll(".place-dot")
+		.data(places.features)
 	.enter().append("path")
-		.attr("class", "symbol")
-		.attr("d", path.pointRadius(function(d) { return radius(d.properties.population); }));
+		.attr("class", "place-dot")
+		.attr("d", path.pointRadius(1));
 };
 
 if (false) {
