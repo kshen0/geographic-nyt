@@ -6,7 +6,7 @@ import sys
 
 def main(argv):
 	if len(argv) != 2 or int(argv[0]) < 1980:
-		print "Invalid args: " + argv
+		print "Invalid args: " + str(argv)
 		return
 
 	year = int(argv[0])

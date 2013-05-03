@@ -1,32 +1,46 @@
 var width = 754,
     height = 700;
 
-/*
-var width = 960,
-    height = 500;
-*/
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+var svg = null;
 
 var proj = "orthographic";
+var TRANSITION_TIME = 400; // ms
 
 var moveable = false;
+
+// JSON
 var articlesByCountry = null;
-d3.json("/json/output/articles_by_country.json", function(e, json) {
-	if (e) return console.warn(e);
-	articlesByCountry = json;
-});
+var world = null;
+var countries = null;
+var places = null;
 
 
 queue()
 	.defer(d3.json, "/json/world/subunits_litest_topo.json")
 	.defer(d3.json, "/json/output/countries_2012_v3.json")
 	.defer(d3.json, "/json/output/places_2012_lite.json")
-	.await(loadingDone);
+	.defer(d3.json, "/json/output/articles_by_country.json")
+	.await(cacheJSON);
 
-function loadingDone(error, world, countries, places, freq) {
+function cacheJSON(error, w, c, p, a) {
+	if (error) {
+		console.warn(error);
+	}
+	world = w;
+	countries = c;
+	places = p;
+	articlesByCountry = a;
+
+	renderMap();
+};
+
+function renderMap() {
+	if (!svg) {
+		svg = d3.select("#svg-container").append("svg")
+		    .attr("width", width)
+		    .attr("height", height);
+	}
 	// Choose a projection
 	var projection = null;
 	if (proj == "mercator") {
@@ -85,7 +99,8 @@ function loadingDone(error, world, countries, places, freq) {
 	svg.append("path")
 	    .datum(topojson.mesh(world, world.objects.subunits_litest, function(a, b) { return a !== b; }))
 	    .attr("d", path)
-	    .attr("class", "subunit-boundary");
+	    .attr("class", "subunit-boundary")
+	    .attr("opacity", 0);
 	*/
 
 	// Draw dots for countries
@@ -98,14 +113,12 @@ function loadingDone(error, world, countries, places, freq) {
 	*/
 
 	// Draw dots for non-country places 
-	/*
 	svg.selectAll(".place-dot")
 		.data(places.features)
 	.enter().append("path")
 		.attr("class", "place-dot")
 		.attr("d", path.pointRadius(1))
 		.attr("opacity", 0);
-	*/
 
 	// Enable rotation
 	var λ = d3.scale.linear()
@@ -153,20 +166,111 @@ function loadingDone(error, world, countries, places, freq) {
 		*/
 	});
 
+	// Hacky fix for only part of background changing color
+	svg.append("rect")
+		.attr("x", -1)
+		.attr("y", -1)
+		.attr("width", 1)
+		.attr("height", 1);
+	svg.append("rect")
+		.attr("x", 754)
+		.attr("y", 700)
+		.attr("width", 1)
+		.attr("height", 1);
+
 	// Append buttons
-	var button = svg.append("g");
+	var button = svg.append("g")
+		.attr("id", "blackout-button")
+		.on("click", function() {
+			blackout();	
+		});
 	button.append("rect")
-		  .attr("x", 20)
+		  .attr("x", 76)
 		  .attr("y", 20)
 		  .attr("width", 81)
 		  .attr("height", 25)
-		  .attr("fill", "#292929");
+		  .attr("fill", "#333333");
 	button.append("text")
-		  .attr("dx", 25)
+		  .attr("dx", 81)
 		  .attr("dy", 37)
 		  .attr("fill", "#666666")
 		  .text("BLACKOUT");
 
+	svg.transition().style("opacity", "1.0");
+
+};
+
+function lightsOn() {
+	// Background to light blue
+	d3.select("body")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style("background", "url(../img/textured_paper.png) repeat");
+
+	// Header to dark grey
+	d3.select("h1")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style("color", "#141414");
+
+
+	// Redraw the svg
+	d3.select("svg").remove();
+	svg = null;
+	renderMap();
+};
+
+function blackout() {
+	var dotOpacityScale = d3.scale.sqrt()
+	    .domain([0, 400])
+	    .range([0.3, 1]);
+
+	d3.select("#blackout-button")
+		.remove();
+
+	// Append buttons
+	var button = svg.append("g")
+		.attr("id", "blackout-button")
+		.on("click", function() {
+			lightsOn();	
+		});
+	button.append("rect")
+		  .attr("x", 76)
+		  .attr("y", 20)
+		  .attr("width", 81)
+		  .attr("height", 25)
+		  .attr("fill", "#273C5A");
+	button.append("text")
+		  .attr("dx", 81)
+		  .attr("dy", 37)
+		  .attr("fill", "#121D2B")
+		  .text("LIGHTS ON");
+
+	d3.selectAll(".subunit")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style({"fill": "#1F1F1F",
+				"opacity": "1.0"});
+
+	d3.selectAll(".place-dot")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style({"opacity": function(d) {
+				return dotOpacityScale(d.properties.article_count);
+			} 
+		});
+
+	// Page background to dark grey
+	d3.select("body")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style("background", "#141414");
+
+	// Header text color to cobalt 
+	d3.select("h1")
+		.transition()
+		.duration(TRANSITION_TIME)
+		.style("color", "#273C5A");
 };
 
 function launchRandomUrl(country) {

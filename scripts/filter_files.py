@@ -6,11 +6,12 @@ from geopy import geocoders
 from geopy.geocoders.base import Geocoder, GeocoderResultError
 import time
 
-FACET = "nytd_geo_facet"
-USE_CACHED = True
+FACET = "geo_facet"
+USE_CACHED = False 
 
 def main(year):
 	if not USE_CACHED:
+		print "Beginning ..."
 		# load list of all articles
 		filename = "../json/output/nyt_articles_%s_all.json" % str(year)
 		all_articles = jsonfiles.read(filename)
@@ -28,6 +29,7 @@ def main(year):
 		# 	 ...
 		# }
 		locations = categorize(filtered_articles)
+		#locations = categorize_from_local(filtered_articles)
 
 		# write out articles that have been geocoded
 		jsonfiles.write("../json/output/geocoded_locs_" + str(year) + ".json", locations)
@@ -147,22 +149,61 @@ def categorize(articles):
 			locations[geo_facet]["articles"].append(article)
 	return locations
 
+# divide articles by their nytd_geo_facet 
+def categorize_from_local(articles):
+	locations = {}
+	i = 0
+	for article in articles:
+		for geo_facet in article[FACET]:
+			if geo_facet not in locations:
+				# get geodata
+				try:
+					places = g.geocode(geo_facet, exactly_one=False)
+				except GeocoderResultError as err:
+					print str(err) + " for facet " + geo_facet
+					continue
+				except ValueError as err:
+					print str(err) + " for facet " + geo_facet
+					continue
+
+				# create articles list for this location
+				locations[geo_facet] = {"articles": []} 
+
+				# add the coordinates
+				place = places[0]
+				name = place[0]
+				lat, lon = place[1][0], place[1][1]
+				print "%d - %s: %.5f, %.5f" % (i, name, lat, lon)
+				locations[geo_facet]["lat"] = lat
+				locations[geo_facet]["lon"] = lon
+				locations[geo_facet]["name"] = name
+
+				# wait to avoid being locked out of api
+				time.sleep(0.5)
+				i += 1
+
+			locations[geo_facet]["articles"].append(article)
+	return locations
+
 
 def get_geotagged(all_articles):
 	filtered_articles = []
 	for article in all_articles:
 		#print "considering " + article["title"]
 		if (FACET in article):
-			new_article = {
-				"date": article["date"],
-				"title": article["title"].title(),
-				"url": article["url"],
-				FACET: article[FACET]
-			}
-			if "page_facet" in article:
-				new_article["page_facet"] = article["page_facet"]
+			try:
+				new_article = {
+					"date": article["date"],
+					"title": article["title"].title(),
+					"url": article["url"],
+					FACET: article[FACET]
+				}
+				if "page_facet" in article:
+					new_article["page_facet"] = article["page_facet"]
 
-			filtered_articles.append(new_article)
+				filtered_articles.append(new_article)
+			except KeyError as e:
+				print "no such key: " + str(e)
 
 	print str(len(filtered_articles)) + " articles found"
 

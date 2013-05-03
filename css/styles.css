@@ -1,11 +1,38 @@
 body {
   font: small Georgia, serif;
   font-family: 'Georgia', serif;
+  /*
+  background: #DAE7E7;
+  */
+  background: url(../img/textured_paper.png) repeat;
+  margin-left: 0px;
 }
 
-.country-dot {
-  fill: steelblue;
-  opacity: 0.9;
+#main {
+  position: relative;
+  margin: 0 auto 0 auto;
+  width: 754px;
+}
+
+#main h1 {
+  margin: 0 auto;
+  color: #141414;
+  text-align: center;
+}
+
+#svg-container {
+  position: relative;
+  height: 700px;
+  width: 754px;
+
+}
+
+#footer {
+  width: 100%;
+  background: rgba(20, 20, 20, 0.85);
+  height: 50px;
+  position: absolute;
+  bottom: 0px;
 }
 
 .place-dot {
@@ -14,13 +41,11 @@ body {
 }
 
 svg {
-  /*
-  background-color: #000;
-  */
-  background-color: #DAE7E7;
+  fill: none;
   font: Helvetica, Arial, sans-serif;
   font-family: 'Helvetica', 'Arial', 'sans-serif';
   font-size: 10pt; 
+  opacity: 0;
   /*
 	fill: #DAE7E7;
   */
@@ -35,9 +60,6 @@ svg {
 
 .subunit-boundary {
   fill: none;
-  /*
   stroke: #DAE7E7;
-  */
-  stroke: none;
   stroke-linejoin: round;
 }
