@@ -4,8 +4,8 @@ import pprint
 
 country_freq = jsonfiles.read('../json/output/article_freq_by_country.json')
 place_freq = jsonfiles.read('../json/output/article_freq_by_place.json')
-articles = jsonfiles.read('../json/output/nyt_articles_2012_filtered.json')
-coords = jsonfiles.read('../json/output/place_to_coord_mappings.json')
+articles = jsonfiles.read('../json/output/nyt_articles_1982_filtered.json')
+coords = jsonfiles.read('../json/output/place_to_coord_mappings_1982.json')
 
 def main():
 

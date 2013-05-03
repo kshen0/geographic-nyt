@@ -18,7 +18,7 @@ var places = null;
 
 queue()
 	.defer(d3.json, "/json/world/subunits_litest_topo.json")
-	.defer(d3.json, "/json/output/countries_2012_v3.json")
+	.defer(d3.json, "/json/output/countries_2012_lite.json")
 	.defer(d3.json, "/json/output/places_2012_lite.json")
 	.defer(d3.json, "/json/output/articles_by_country.json")
 	.await(cacheJSON);

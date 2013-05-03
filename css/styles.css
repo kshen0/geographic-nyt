@@ -35,6 +35,25 @@ body {
   bottom: 0px;
 }
 
+#footer p {
+  margin: 15px auto;
+  text-align: center;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+#footer a:link {
+  color: #314C72;
+  text-decoration: none;
+}
+#footer a:active {
+  color: #314C72;
+  text-decoration: none;
+}
+#footer a:visited {
+  color: #273C5A;
+  text-decoration: none;
+}
+
 .place-dot {
   fill: #F7FAB1;
   /*opacity: 0.9;*/
