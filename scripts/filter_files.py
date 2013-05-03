@@ -35,15 +35,23 @@ def main(year):
 		filtered_articles = jsonfiles.read("../json/output/nyt_articles_" + str(year) + "_filtered.json")
 		locations = jsonfiles.read("../json/output/geocoded_locs_" + str(year) + ".json")
 
-	# get the number of articles in each category in descending order
-	# this is not necessary for writing output
-	# counts = [(loc, len(locations[loc]["articles"])) for loc in locations]
-	# descending = sorted(counts, key = lambda x: x[1])
-	# descending.reverse()
-	# pprint.pprint(descending[:300])
 
 	# list of the countries in the world
 	countries_dict = jsonfiles.read("../json/output/countries.json")
+
+	# get the number of articles in each country in descending order
+	counts = [(loc, len(locations[loc]["articles"])) for loc in locations if loc in countries_dict]
+	descending = sorted(counts, key = lambda x: x[1])
+	descending.reverse()
+	freq = {d[0]: d[1] for d in descending}
+	jsonfiles.write('../json/output/article_freq_by_country.json', freq)
+
+	# do the same for places
+	counts = [(loc, len(locations[loc]["articles"])) for loc in locations if loc not in countries_dict]
+	descending = sorted(counts, key = lambda x: x[1])
+	descending.reverse()
+	freq = {d[0]: d[1] for d in descending}
+	jsonfiles.write('../json/output/article_freq_by_place.json', freq)
 
 	countries_geojson = {
 		"type": "FeatureCollection",
@@ -70,7 +78,7 @@ def main(year):
 	print ("%d article matches for countries and %d matches for places" %
 			(len(countries_geojson["features"]), len(places_geojson["features"])))
 
-	write_output(filtered_articles, countries_geojson, places_geojson, year)
+	# write_output(filtered_articles, countries_geojson, places_geojson, year)
 
 def write_output(filtered_articles, countries_geojson, places_geojson, year):
 	# write to file
