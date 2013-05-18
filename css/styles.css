@@ -11,7 +11,7 @@ body {
 #main {
   position: relative;
   margin: 0 auto 0 auto;
-  width: 754px;
+  width: 900px;
 }
 
 #main h1 {
@@ -21,6 +21,7 @@ body {
 }
 
 #svg-container {
+  margin: 0 auto;
   position: relative;
   height: 700px;
   width: 754px;

@@ -2,11 +2,10 @@ var width = 754,
     height = 700;
 
 
-var svg = null;
-
-var proj = "orthographic";
+var svg, projection, path;
 var TRANSITION_TIME = 400; // ms
 
+// map movement
 var moveable = false;
 
 // JSON
@@ -14,19 +13,18 @@ var world = null;
 var countries = null;
 var places = null;
 var articlesByCountry = null;
+var populations = null;
 
 
-/*
 queue()
-	.defer(d3.json, "/subunits_litest_topo.json")
-	.defer(d3.json, "/countries_2012_lite.json")
-	.defer(d3.json, "/places_2012_lite.json")
-	.defer(d3.json, "/articles_by_country.json")
+	.defer(d3.json, "data/subunits_litest_topo.json")
+	.defer(d3.json, "data/countries_2012_lite.json")
+	.defer(d3.json, "data/places_2012_lite.json")
+	.defer(d3.json, "data/articles_by_country.json")
+	.defer(d3.json, "data/country_populations_2010.json")
 	.await(cacheJSON);
-*/
 
-/*
-function cacheJSON(error, w, c, p, a) {
+function cacheJSON(error, w, c, p, a, pop) {
 	if (error) {
 		console.warn(error);
 	}
@@ -34,10 +32,12 @@ function cacheJSON(error, w, c, p, a) {
 	countries = c;
 	places = p;
 	articlesByCountry = a;
+	populations = pop;
 
 	renderMap();
 };
-*/
+/*
+// Janky shit that should never be in production
 cacheJSON();
 
 function cacheJSON() {
@@ -55,32 +55,22 @@ function cacheJSON() {
 		});
 	});
 }
-
+*/
 
 function renderMap() {
 	if (!svg) {
 		svg = d3.select("#svg-container").append("svg")
 		    .attr("width", width)
-		    .attr("height", height);
+		    .attr("height", height)
+		    .on("mousedown", mousedown);
 	}
 	// Choose a projection
-	var projection = null;
-	if (proj == "mercator") {
-		projection = d3.geo.mercator()
-			.scale(120)
-			.translate([width/2, height/2]);
-	}
-	else if (proj == "orthographic") {
-		projection = d3.geo.orthographic()
-			.scale(300)
-			.translate([width / 2, height / 2])
-			.clipAngle(90);
-	}
-	else {
-		alert("Choose a projection");
-	}
+	projection = d3.geo.orthographic()
+		.scale(300)
+		.translate([width / 2, height / 2])
+		.clipAngle(90);
 
-	var path = d3.geo.path()
+	path = d3.geo.path()
 				.projection(projection);
 
 	// Define a function to get radius
@@ -92,6 +82,10 @@ function renderMap() {
 	    .domain([0, 1500])
 	    .range([0.2, 1]);
 
+	var populationScale = d3.scale.sqrt()
+		.domain([0, 1000000000])
+		.range([0.2, 1]);
+
 	// Draw countries of the world
 	/*
 	svg.append("path")
@@ -102,13 +96,30 @@ function renderMap() {
 	svg.selectAll(".subunit")
 		.data(topojson.feature(world, world.objects.subunits_litest).features)
 		.enter().append("path")
-		.attr("class", function(d) { return "subunit " + d.id; })
+		.attr("class", function(d) { 
+			var id = d.id.replace(' ', '-');
+			return "subunit " + id; 
+		})
 		.attr("d", path)
 		.attr("opacity", function(d) {
-			if (d.id in articlesByCountry) {
-				return opacityScale(articlesByCountry[d.id]['article_count']);
+			var countryName = d.id.replace('-', ' ');
+			if (countryName in articlesByCountry) {
+				if (!(countryName in populations)) {
+					console.log('could not find ' + d.id + ' in populations');
+					return 0.1;
+				}
+				else {
+					var articleCount = articlesByCountry[countryName]['article_count'];
+					var pop = populations[countryName];
+					var articlesPerCapita = articleCount / (pop);
+					//console.log(countryName + ': ' + pop);
+					//console.log(countryName + ': ' + articlesPerCapita);
+					return opacityScale(articlesByCountry[countryName]['article_count']);
+					//return populationScale(pop);
+				}
 			}
 			else {
+				//console.log('could not find ' + countryName + ' in countries');
 				return 0.1;
 			}
 		})
@@ -152,41 +163,23 @@ function renderMap() {
 	    .range([90, -90]);
 
 	    
+	/*
 	svg.on("mousemove", function() {
 		if (moveable) {
 			p = d3.mouse(this);
 			projection.rotate([λ(p[0]), φ(p[1])]);
 			svg.selectAll("path").attr("d", path);
 		}
-		/*
-		var p = d3.mouse(this);
-		if (m0) {
-			var m1 = [p[0], p[1]],
-			o1 = [o0[0] + (m0[0] - m1[0]) / 8, o0[1] + (m1[1] - m0[1]) / 8];
-			projection.center(o1);
-		}
-		*/
 	});
 
 	svg.on("mousedown", function() {
 		moveable = true;
-
-		/*
-		var p = d3.mouse(this);
-		m0 = [p[0], p[1]];
-		o0 = projection.center();
-		*/
 	});
 
 	svg.on("mouseup", function() {
 		moveable = false;
-
-		/*
-		if (m0) {
-			m0 = null;
-		}
-		*/
 	});
+	*/
 
 	// Hacky fix for only part of background changing color
 	svg.append("rect")
@@ -200,26 +193,72 @@ function renderMap() {
 		.attr("width", 1)
 		.attr("height", 1);
 
-	// Append buttons
-	var button = svg.append("g")
-		.attr("id", "blackout-button")
-		.on("click", function() {
-			blackout();	
-		});
-	button.append("rect")
-		  .attr("x", 76)
-		  .attr("y", 20)
-		  .attr("width", 81)
-		  .attr("height", 25)
-		  .attr("fill", "#333333");
-	button.append("text")
-		  .attr("dx", 81)
-		  .attr("dy", 37)
-		  .attr("fill", "#666666")
-		  .text("BLACKOUT");
+	appendButtons(function() { blackout(); }, "LIGHTS", 
+					"blackout-button");
 
 	svg.transition().style("opacity", "1.0");
 
+};
+
+d3.select(window)
+    .on("mousemove", mousemove)
+    .on("mouseup", mouseup);
+
+var m0, dx, dy;
+var mousePrev = [width / 2, height / 2];
+
+// Enable rotation
+var λ = d3.scale.linear()
+    .domain([0, width])
+    .range([-180, 180]);
+
+var φ = d3.scale.linear()
+    .domain([0, height])
+    .range([90, -90]);
+
+function mousedown() {
+	dx = d3.event.pageX - mousePrev[0];
+	dy = d3.event.pageY - mousePrev[1];
+	d3.event.preventDefault();
+	moveable = true;
+};
+
+function mousemove() {
+  if (moveable) {
+    var m1 = [d3.event.pageX - dx, d3.event.pageY - dy];
+	projection.rotate([λ(m1[0]), φ(m1[1])]);
+	svg.selectAll("path").attr("d", path);
+  }
+};
+
+function mouseup() {
+	mousemove();
+	mousePrev = [d3.event.pageX - dx, d3.event.pageY - dy];
+	moveable = false;
+};
+
+function appendButtons(action, txt, id) {
+	var button = svg.append("g")
+		.attr("id", id)
+		.on("click", action);
+
+	var w = 60, h = 25;
+	x = width / 2 - w /2;
+	y = height - h - 10;
+
+	button.append("rect")
+		  .attr("x", x)
+		  .attr("y", y)
+		  .attr("width", w)
+		  .attr("height", h)
+		  .attr("fill", "#333333");
+	button.append("text")
+		  .attr("x", x)
+		  .attr("y", y)
+		  .attr("dx", 6)
+		  .attr("dy", "1.3em")
+		  .attr("fill", "#666666")
+		  .text(txt);
 };
 
 function lightsOn() {
@@ -250,23 +289,8 @@ function blackout() {
 	d3.select("#blackout-button")
 		.remove();
 
-	// Append buttons
-	var button = svg.append("g")
-		.attr("id", "blackout-button")
-		.on("click", function() {
-			lightsOn();	
-		});
-	button.append("rect")
-		  .attr("x", 76)
-		  .attr("y", 20)
-		  .attr("width", 81)
-		  .attr("height", 25)
-		  .attr("fill", "#273C5A");
-	button.append("text")
-		  .attr("dx", 81)
-		  .attr("dy", 37)
-		  .attr("fill", "#121D2B")
-		  .text("LIGHTS ON");
+	appendButtons(function() { lightsOn() }, "LIGHTS", 
+					"blackout-button");
 
 	d3.selectAll(".subunit")
 		.transition()
@@ -306,3 +330,4 @@ function launchRandomUrl(country) {
 		var win = window.open(url, '_blank');
 	}
 }
+
