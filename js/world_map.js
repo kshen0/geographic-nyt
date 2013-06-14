@@ -36,26 +36,6 @@ function cacheJSON(error, w, c, p, a, pop) {
 
 	renderMap();
 };
-/*
-// Janky shit that should never be in production
-cacheJSON();
-
-function cacheJSON() {
-	$.getJSON('./js/subunits_litest_topo.json', function(json) {
-		world = json;
-		$.getJSON('./js/countries_2012_lite.json', function(json) {
-			countries = json;
-			$.getJSON('./js/places_2012_lite.json', function(json) {
-				places = json;
-				$.getJSON('./js/articles_by_country.json', function(json) {
-					articlesByCountry = json;
-						renderMap();
-				});
-			});
-		});
-	});
-}
-*/
 
 function renderMap() {
 	if (!svg) {
@@ -82,9 +62,11 @@ function renderMap() {
 	    .domain([0, 1500])
 	    .range([0.2, 1]);
 
-	var populationScale = d3.scale.sqrt()
-		.domain([0, 1000000000])
+	var populationScale = d3.scale.log()
+		.domain([0.0000001, 0.0087])
 		.range([0.2, 1]);
+
+	var maxCapita = 0;
 
 	// Draw countries of the world
 	/*
@@ -112,10 +94,18 @@ function renderMap() {
 					var articleCount = articlesByCountry[countryName]['article_count'];
 					var pop = populations[countryName];
 					var articlesPerCapita = articleCount / (pop);
-					//console.log(countryName + ': ' + pop);
-					//console.log(countryName + ': ' + articlesPerCapita);
-					return opacityScale(articlesByCountry[countryName]['article_count']);
-					//return populationScale(pop);
+					/*
+					console.log('\n' + countryName);
+					console.log('Population: ' + pop);
+					console.log('Artices: ' + articleCount);
+					console.log('Articles per capita: ' + articlesPerCapita);
+					*/
+					if (articlesPerCapita > maxCapita) {
+						maxCapita = articlesPerCapita;
+					}
+					//return opacityScale(articlesByCountry[countryName]['article_count']);
+					console.log(populationScale(articlesPerCapita));
+					return populationScale(articlesPerCapita);
 				}
 			}
 			else {
@@ -134,7 +124,7 @@ function renderMap() {
 	    .attr("d", path)
 	    .attr("class", "subunit-boundary")
 	    .attr("opacity", 0);
-	*/
+    */
 
 	// Draw dots for countries
 	/*
@@ -152,34 +142,6 @@ function renderMap() {
 		.attr("class", "place-dot")
 		.attr("d", path.pointRadius(1))
 		.attr("opacity", 0);
-
-	// Enable rotation
-	var λ = d3.scale.linear()
-	    .domain([0, width])
-	    .range([-180, 180]);
-
-	var φ = d3.scale.linear()
-	    .domain([0, height])
-	    .range([90, -90]);
-
-	    
-	/*
-	svg.on("mousemove", function() {
-		if (moveable) {
-			p = d3.mouse(this);
-			projection.rotate([λ(p[0]), φ(p[1])]);
-			svg.selectAll("path").attr("d", path);
-		}
-	});
-
-	svg.on("mousedown", function() {
-		moveable = true;
-	});
-
-	svg.on("mouseup", function() {
-		moveable = false;
-	});
-	*/
 
 	// Hacky fix for only part of background changing color
 	svg.append("rect")
@@ -200,6 +162,7 @@ function renderMap() {
 
 };
 
+// Enable rotation
 d3.select(window)
     .on("mousemove", mousemove)
     .on("mouseup", mouseup);
@@ -207,7 +170,6 @@ d3.select(window)
 var m0, dx, dy;
 var mousePrev = [width / 2, height / 2];
 
-// Enable rotation
 var λ = d3.scale.linear()
     .domain([0, width])
     .range([-180, 180]);
@@ -217,6 +179,7 @@ var φ = d3.scale.linear()
     .range([90, -90]);
 
 function mousedown() {
+	// Calculate distance between this mouse click and previous mouse up
 	dx = d3.event.pageX - mousePrev[0];
 	dy = d3.event.pageY - mousePrev[1];
 	d3.event.preventDefault();
@@ -225,7 +188,9 @@ function mousedown() {
 
 function mousemove() {
   if (moveable) {
+  	// Set mouse event relative to previous mouse up to avoid twitchy rotation
     var m1 = [d3.event.pageX - dx, d3.event.pageY - dy];
+    // Rotate the globe
 	projection.rotate([λ(m1[0]), φ(m1[1])]);
 	svg.selectAll("path").attr("d", path);
   }

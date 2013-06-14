@@ -1,9 +1,6 @@
 body {
   font: small Georgia, serif;
   font-family: 'Georgia', serif;
-  /*
-  background: #DAE7E7;
-  */
   background: url(../img/textured_paper.png) repeat;
   margin-left: 0px;
 }
@@ -72,14 +69,14 @@ svg {
 }
 
 .subunit { 
-  /*
   fill: #000; 
-  */
   fill: #273C5A;
 }
 
+/*
 .subunit-boundary {
   fill: none;
   stroke: #DAE7E7;
   stroke-linejoin: round;
 }
+*/
